@@ -1,0 +1,22 @@
+spec:
+  containers:
+  - name: code-server-2
+    image: sfsenorthamerica-demo-cgoyette.registry.snowflakecomputing.com/container_hol_db/public/image_repo/code-server-conda:amd64-latest
+    volumeMounts:
+    - name: vscode-workspace
+      mountPath: /config/workspace/stage-files
+    resources:                         
+      requests:
+        cpu: 2
+        memory: 8Gi
+  endpoints:
+  - name: code-server-2
+    port: 8443
+    public: true
+  volumes:
+  - name: vscode-workspace
+    source: '@volumes/code-server-2'
+    uid: 911
+    gid: 911
+  networkPolicyConfig:
+      allowInternetEgress: true
