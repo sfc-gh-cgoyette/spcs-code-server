@@ -1,4 +1,4 @@
-name: snowpark-python
+name: snowpark-python-test-conda
 channels:
   - https://repo.anaconda.com/pkgs/snowflake
 dependencies:
