@@ -1,7 +1,7 @@
 spec:
   containers:
-  - name: code-server
-    image: sfsenorthamerica-demo-cgoyette.registry.snowflakecomputing.com/container_hol_db/public/image_repo/code-server-conda:amd64-latest
+  - name: code-server-r-py
+    image: sfsenorthamerica-demo-cgoyette.registry.snowflakecomputing.com/container_hol_db/public/image_repo/code-server-r-py-deps-3:amd64-latest
     volumeMounts:
     - name: vscode-workspace
       mountPath: /config/workspace/stage-files
@@ -10,11 +10,11 @@ spec:
         cpu: 2
         memory: 8Gi
   endpoints:
-  - name: code-server
+  - name: code-server-ep
     port: 8443
     public: true
   volumes:
   - name: vscode-workspace
-    source: '@volumes/code-server'
+    source: '@volumes/code-server-r-py'
     uid: 911
     gid: 911

@@ -26,13 +26,13 @@ USE ROLE CONTAINER_USER_ROLE;
 SHOW COMPUTE POOLS;
 
 ---Prior to creating a service from a spec file, make sure you have uploaded the spec file to yoru @specs stage
-CREATE SERVICE CONTAINER_HOL_DB.PUBLIC.CODE_SERVER
+CREATE SERVICE CONTAINER_HOL_DB.PUBLIC.CODE_SERVER_R_PY_DEPS
 IN COMPUTE POOL CONTAINER_HOL_POOL
 from @specs
-specification_file='code-server.yaml'
+specification_file='code-server-r-py.yaml'
 external_access_integrations = (ALLOW_ALL_EAI);
 
-DESCRIBE SERVICE code_server;
+DESCRIBE SERVICE code_server_r_py_deps;
 
 SHOW SERVICES;
 
@@ -43,10 +43,10 @@ CALL SYSTEM$GET_SERVICE_STATUS('CONTAINER_HOL_DB.PUBLIC.CODE_SERVER');
 CALL SYSTEM$GET_SERVICE_LOGS('CONTAINER_HOL_DB.PUBLIC.CODE_SERVER', '0', 'code-server',100);
 
 ---show endpoint; use for browser-based ingress to this long-running interactive service
-SHOW ENDPOINTS IN SERVICE CODE_SERVER;
+SHOW ENDPOINTS IN SERVICE CODE_SERVER_R_PY_DEPS;
 
 ---shut down/clean up
-ALTER SERVICE CODE_SERVER SUSPEND;
+ALTER SERVICE CODE_SERVER_R_PY SUSPEND;
 
 ALTER COMPUTE POOL CONTAINER_HOL_POOL SUSPEND;
 
