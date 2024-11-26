@@ -1,7 +1,7 @@
 spec:
   containers:
   - name: code-server-r-py
-    image: sfsenorthamerica-demo-cgoyette.registry.snowflakecomputing.com/container_hol_db/public/image_repo/code-server-r-py-deps-3:amd64-latest
+    image: sfsenorthamerica-demo-cgoyette.registry.snowflakecomputing.com/container_hol_db/public/image_repo/code-server-r-py:amd64-latest
     volumeMounts:
     - name: vscode-workspace
       mountPath: /config/workspace/stage-files
