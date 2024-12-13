@@ -1,29 +1,31 @@
 FROM lscr.io/linuxserver/code-server:amd64-latest
 
 # Install wget to fetch Miniconda
-RUN apt-get update && \
-    apt-get install -y wget && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get install -y wget \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# R pre-requisites
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+# R deps
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
     make \
     fonts-dejavu \
     unixodbc \
-    unixodbc-dev \
-    r-cran-rodbc \
-    gfortran \
-    gcc && \
-    rm -rf /var/lib/apt/lists/*
+    unixodbc-dev \   
+    r-cran-rodbc \   
+    gfortran \     
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
+# More R deps
 RUN apt-get update \
     && apt-get install -y build-essential
 
 # Fix for devtools https://github.com/conda-forge/r-devtools-feedstock/issues/4
 RUN ln -s /bin/tar /bin/gtari
 
+# R installation
 # update indices
 RUN apt update -qq
 # install two helper packages we need
@@ -33,24 +35,23 @@ RUN apt install --no-install-recommends -y software-properties-common dirmngr
 # Fingerprint: E298A3A825C0D65DFD57CBB651716619E084DAB9
 RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
 # add the R 4.0 repo from CRAN -- adjust 'focal' to 'groovy' or 'bionic' as needed
-RUN add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+RUN add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" 
 
-RUN apt install --no-install-recommends -y r-base
-RUN apt install --no-install-recommends -y r-cran-tidyverse
+RUN apt install --no-install-recommends -y r-base 
+RUN apt install --no-install-recommends -y r-cran-tidyverse 
 
-RUN R -e "install.packages('languageserver',dependencies=TRUE, repos='http://cran.rstudio.com/')" 
+# R for VSCode prereq
+RUN R -e "install.packages('languageserver',dependencies=TRUE, repos='http://cran.rstudio.com/')"
+# popular modeling library
+RUN R -e "install.packages('gamlss',dependencies=TRUE, repos='http://cran.rstudio.com/')"
 
 # Install Miniconda on x86 or ARM platforms
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
-RUN /bin/bash /tmp/miniconda.sh -b -p /opt/conda && \
-    rm /tmp/miniconda.sh && \
-    echo "export PATH=/opt/conda/bin:$PATH" > /etc/profile.d/conda.sh
-ENV PATH=/opt/conda/bin:$PATH
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh 
+RUN /bin/bash /tmp/miniconda.sh -b -p /opt/conda \
+    && rm /tmp/miniconda.sh \
+    && echo "export PATH=/opt/conda/bin:$PATH" > /etc/profile.d/conda.sh 
+ENV PATH=/opt/conda/bin:/lsiopy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-RUN conda --version
-
-#RUN code-server --install-extension ms-toolsai.jupyter
-#RUN code-server --install-extension reditorsupport.r 
-#RUN code-server --install.extension snowflake.snowflake-vsc
-
-
+#checks
+RUN conda --version 
+RUN R -e "library('languageserver')"

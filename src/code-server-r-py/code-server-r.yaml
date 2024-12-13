@@ -1,0 +1,20 @@
+spec:
+  containers:
+  - name: code-server-r
+    image: sfsenorthamerica-demo-cgoyette.registry.snowflakecomputing.com/container_hol_db/public/image_repo/code-server-r:amd64-latest-with-gamlss
+    volumeMounts:
+    - name: vscode-workspace
+      mountPath: /config/workspace/stage-files
+    resources:                         
+      requests:
+        cpu: 2
+        memory: 8Gi
+  endpoints:
+  - name: code-server-endpoint
+    port: 8443
+    public: true
+  volumes:
+  - name: vscode-workspace
+    source: '@volumes/code-server-r-py'
+    uid: 911
+    gid: 911

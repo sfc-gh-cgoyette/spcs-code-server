@@ -9,3 +9,4 @@ dependencies:
   - pip:
     - snowflake
     - snowflake-cli-labs==2.0.0rc1
+    - snowflake-ml-python
