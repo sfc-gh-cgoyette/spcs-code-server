@@ -1,8 +1,12 @@
 
 # Snowpark Container Services - Remote VSCode (code-server)
+## Now Including R Kernel
 ---
 This repository contains code that builds upon the quickstart [Intro to Snowpark Container Services Quickstart](https://quickstarts.snowflake.com/guide/intro_to_snowpark_container_services/index.html). 
 
+This specific branch includes details on how to update your dockerfile to include the R kernel and corresponding dependencies, for a mixed Python & R development environment running on Linuxserver.io's code-server project, aka, containerized VSCode. 
+
+---
 Please refer to the quickstart for a complete set of instructions for getting started with spcs, including configuring roles required for use of SPCS, creating and managing compute pools, and configuring corresponding network configurations for services deployed in SPCS. 
 
 ## Topics
@@ -15,7 +19,7 @@ Please refer to the quickstart for a complete set of instructions for getting st
 
 ### Topics 1-5: Configuring SPCS & code-server service
 - Please see the quickstart, linked above, and the included notebook, code-server-conda-setup.ipynb, which details several code-server specific implementation steps 
-- [spcs_configuration_maangement.sql](spcs_configuration_management.sql) also contains several useful snippets for interacting with SPCS services & underlying compute pool via Snowflake SQL commands.
+- [spcs_configuration_management.sql](spcs_configuration_management.sql) also contains several useful snippets for interacting with SPCS services & underlying compute pool via Snowflake SQL commands.
 
 ### Topic 6: Best practices for SPCS-based code-server
 
@@ -43,4 +47,11 @@ from snowflake.ml.utils import connection_params
 session = Session.builder.configs(connection_params.SnowflakeLoginOptions()).create()   
 ```
 
+---
 
+### Topic 7: Adding R functionality
+
+1. **Add R-specific dockerfile layers**: Additional dockerfile layers are included in this branch, to add the R kernel, underlying compilers, prerequisite libraries for the R VSCode plugin, and a common GAM modeling library. 
+3. **Upon logging into your service, install the R VSCode Plugin** This extension provides general support for R within VSCode. This includes syntax highlighting, the use of R terminals, and viewing data & plots. Note that the package 'languageserver', which we installed in the dockerfile, is a pre-requisite for this extension.
+
+That's it! Once you've installed the R plugin, you can open a terminal from the VSCode command bar, or you can open the included R_test.rmd file and execute the chunks. Each chunk can be executed individually, or you can highlight all text within the .Rmd file and use the hotkey command-enter. 
